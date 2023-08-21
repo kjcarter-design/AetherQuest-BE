@@ -10,7 +10,7 @@ const auth = require("./auth");
 const mongoose = require('mongoose')
 
 //Use mongoose to connect to MongoDB. Display success or failure message depending on connection status
-mongoose.connect(process.env.DATABASE_URL || "mongodb://127.0.0.1:27017/myApplication", { useNewUrlParser: true })
+mongoose.connect(process.env.DATABASE_URL || "mongodb+srv://kjcarterdesign:iuaAqyukOuBWNGf4@aq-data.ckr5xzx.mongodb.net/", { useNewUrlParser: true })
     .then(() => {
         console.log("we have connected to mongo")
     }).catch(() => {
