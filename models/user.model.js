@@ -1,7 +1,7 @@
 // Bring in mongoose so we can create a schema that represents the data for a User
 const mongoose = require("mongoose");
 // Require bcrypt to help with password encryption
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 // Create our schema using mongoose that contains the fields and their data types for our Users
 // More info: https://mongoosejs.com/docs/schematypes.html
