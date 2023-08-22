@@ -29,58 +29,71 @@ const userSchema = new mongoose.Schema({
         required: true,
         select: false
     },
-    characters: [{
-        characterName: String,
-        level: {
-            type: Number,
-            default: 1
-        },
-        experience: {
-            type: Number,
-            default: 0
-        },
-        currentDeck: [{
-            cardId: mongoose.Schema.Types.ObjectId, // Reference to the card's unique ID
-            quantity: Number
+    characters: {
+        type: [{
+            characterName: String,
+            level: {
+                type: Number,
+                default: 1
+            },
+            class: String,
+            race: String
         }],
-        avatar: String // URL or path to avatar image or identifier for preset avatars
-    }],
-    ownedCards: [{
-        cardId: mongoose.Schema.Types.ObjectId, // Reference to the card's unique ID
-        quantity: Number
-    }],
-    decks: [{
-        deckName: String,
-        cards: [{
-            cardId: mongoose.Schema.Types.ObjectId, // Reference to the card's unique ID
-            quantity: Number
-        }]
-    }],
-    stats: {
-        wins: {
-            type: Number,
-            default: 0
-        },
-        losses: {
-            type: Number,
-            default: 0
-        }
-        // Other game-related metrics can be added here
+        default: []
     },
-    achievements: [{
-        title: String,
-        description: String,
-        dateAchieved: Date
-    }],
+    ownedCards: {
+        type: [{
+            cardId: String,
+            cardType: String,
+            cardDetails: Object
+        }],
+        default: []
+    },
+    decks: {
+        type: [{
+            deckName: String,
+            cards: [{
+                cardId: String,
+                quantity: Number
+            }]
+        }],
+        default: []
+    },
+    stats: {
+        type: {
+            gamesPlayed: {
+                type: Number,
+                default: 0
+            },
+            gamesWon: {
+                type: Number,
+                default: 0
+            },
+            totalXP: {
+                type: Number,
+                default: 0
+            }
+        },
+        default: {}
+    },
+    achievements: {
+        type: [String],
+        default: []
+    },
     settings: {
-        theme: {
-            type: String,
-            default: "default"
-        }
-        // Other user settings/preferences
+        type: {
+            darkMode: {
+                type: Boolean,
+                default: false
+            },
+            notifications: {
+                type: Boolean,
+                default: true
+            }
+        },
+        default: {}
     }
-});
-
+})
 userSchema.pre('save', function(next) {
     let user = this;
 
