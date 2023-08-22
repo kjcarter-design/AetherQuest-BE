@@ -21,6 +21,37 @@ components:
           type: string
         password:
           type: string
+        characters:
+          type: array
+          items:
+            type: object
+            properties:
+              characterName:
+                type: string
+              level:
+                type: integer
+        ownedCards:
+          type: array
+          items:
+            type: object
+            properties:
+              cardName:
+                type: string
+              cardType:
+                type: string
+              cardDescription:
+                type: string
+        decks:
+          type: array
+          items:
+            type: object
+            properties:
+              deckName:
+                type: string
+              cards:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ownedCards'
       required:
         - firstName
         - lastName
@@ -38,6 +69,37 @@ components:
           type: string
         email:
           type: string
+        characters:
+          type: array
+          items:
+            type: object
+            properties:
+              characterName:
+                type: string
+              level:
+                type: integer
+        ownedCards:
+          type: array
+          items:
+            type: object
+            properties:
+              cardName:
+                type: string
+              cardType:
+                type: string
+              cardDescription:
+                type: string
+        decks:
+          type: array
+          items:
+            type: object
+            properties:
+              deckName:
+                type: string
+              cards:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ownedCards'
     Login:
       additionalProperties: false
       type: object
@@ -168,14 +230,12 @@ paths:
           description: Get users with a specific first name (fuzzy, case insensitve)
           required: false
           schema:
-            firstName:
             type: string
         - name: lastName
           in: query
           description: Get users with a specific last name (fuzzy, case insensitve)
           required: false
           schema:
-            firstName:
             type: string
       responses:
         '200':
@@ -183,13 +243,12 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - type: object
-                    properties:
-                      users:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/UserResponse'
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserResponse'
         '400':
           $ref: '#/components/responses/400'
     post:
@@ -210,11 +269,10 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - type: object
-                    properties:
-                      user:
-                        $ref: '#/components/schemas/UserResponse'
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
         '400':
           $ref: '#/components/responses/400'
   /api/users/{email}:
@@ -229,10 +287,7 @@ paths:
           schema:
             type: string
             description: The email address of the user
-      security:
-        - bearerAuth: []
       requestBody:
-        description: The user updates
         required: true
         content:
           application/json:
@@ -244,10 +299,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/UserResponse'
         '400':
           $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
+    delete:
+      summary: Delete user
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            description: The email address of the user
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/400'
         '404':
           $ref: '#/components/responses/404'
