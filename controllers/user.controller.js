@@ -105,7 +105,7 @@ const userController = {
     },
     //method to get all users using async/await syntax
     getUser: async function(req, res){
-
+console.log('getUser running')
         //using a try/catch since we are using asyn/await and want to catch any errors if the code in the try block fails
         try {
 
@@ -120,6 +120,7 @@ const userController = {
             //if we found the user, return that user otherwise return a 404
             if(foundUser){
                 res.json(foundUser)
+                console.log(foundUser)
             }else{
                 res.status(404).send({
                     status: res.statusCode,
