@@ -1,8 +1,8 @@
-// Bring in mongoose so we can create a schema that represents the data for a User
-const mongoose = require(mongoose);
+const mongoose = require("mongoose");
 
-// Create our schema using mongoose that contains the fields and their data types for our Users
-// More info: https://mongoosejs.com/docs/schematypes.html
+
+
+
 const characterSchema = new mongoose.Schema({
 	name: {
 		type: String,
@@ -39,7 +39,7 @@ const characterSchema = new mongoose.Schema({
 	magicItem: {
 		type: String,
 		rarity: {
-			name: Enum,
+			name: String
 		},
 		description: String,
 		cost: { quantity: Number, unit: String },
@@ -70,12 +70,14 @@ const characterSchema = new mongoose.Schema({
 			description: String,
 		},
   ],
-  inventory: {
-    default: []
-  },
-  attachedGames: {
-    default: []
-  },
+	inventory: {
+		type: Array,
+		default: []
+	},
+	attachedGames: {
+		type: Array,
+		default: []
+	},
 	image: { type: String },
 });
 

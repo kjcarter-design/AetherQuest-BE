@@ -84,3 +84,5 @@ const characterController = {
 
   // deleteCharacter
 }
+
+module.exports = characterController;

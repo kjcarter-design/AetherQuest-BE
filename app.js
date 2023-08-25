@@ -21,6 +21,7 @@ mongoose.connect(process.env.DATABASE_URL)
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth.routes');
 const usersRouter = require('./routes/user.routes');
+const characterRouter = require('./routes/character.routes')
 const swaggerDocsRouter = require("./routes/swagger.routes");
 
 const app = express();
@@ -34,6 +35,7 @@ app.use(swaggerDocsRouter);
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/api/characters', characterRouter)
 
 //tell our app to use our user routes and prefix them with /api
 app.use('/api/users', usersRouter);
