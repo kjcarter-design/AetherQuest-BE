@@ -46,29 +46,25 @@ const userController = {
         }
     },
     //method to create a new user
-    createUser: async function(req, res){
-
+    createUser: async function(req, res) {
         try {
-
-            //store user data sent through the request
             const userData = req.body;
-
-            //pass the userData to the create method of the User model
-            let newUser = await User.create(userData)
-
-            //return the newly created user
-            res.status(201).json(await User.findById(newUser._id))
-            
+            let newUser = await User.create(userData);
+            res.status(201).json(await User.findById(newUser._id));
         } catch (error) {
-            //handle errors creating user
-            console.log("failed to create user: " + error)
+            if (error.code === 11000) { // MongoDB duplicate key error code
+                return res.status(400).json({
+                    message: "Email already exists.",
+                    statusCode: res.statusCode
+                });
+            }
+            console.log("failed to create user: " + error);
             res.status(400).json({
                 message: error.message,
                 statusCode: res.statusCode
-            })
+            });
         }
-
-    },
+    },    
     //method to update a user
     updateUser: async function(req, res, next){
 
