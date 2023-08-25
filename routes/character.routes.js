@@ -13,8 +13,6 @@ router.get('/', validateJwtMiddleware, characterController.getCharacters);
 
 router.get('/:name', validateJwtMiddleware, characterController.getCharacter);
 
-router.get('/user-characters', validateJwtMiddleware, characterController.getUserCharacters);
-
 router.put('/:name', validateJwtMiddleware, characterController.updateCharacter);
 
 router.delete('/:name', validateJwtMiddleware, characterController.deleteCharacter);

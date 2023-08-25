@@ -101,7 +101,6 @@ const userController = {
     },
     //method to get all users using async/await syntax
     getUser: async function(req, res){
-console.log('getUser running')
         //using a try/catch since we are using asyn/await and want to catch any errors if the code in the try block fails
         try {
 
@@ -133,7 +132,28 @@ console.log('getUser running')
             })
 
         }
-    }
+    },
+
+    getUserCharacters: async function(req, res) {
+        try {
+            const userId = req.params.userId; 
+            console.log("Fetching characters for user:", userId);
+    
+            const user = await User.findById(userId).populate('characters');
+    
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            } 
+            
+            res.json(user.characters);
+        } catch (error) {
+            console.error(`Error fetching user's character list`, error);
+            res.status(400).json({
+                message: error.message,
+                statusCode: res.statusCode
+            });
+        }
+      },
     
 
 }

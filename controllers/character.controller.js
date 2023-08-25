@@ -44,21 +44,7 @@ const characterController = {
 			});
 		}
 	},
-
-  getUserCharacters: async function(req, res) {
-    try {
-      const userId = req.user._id;
-      const user = await User.findById(userId).populate('characters');
-      res.json(user.characters)
-    } catch (error) {
-      console.error(`Error fetching user's character list`, error);
-      res.status(400).json({
-        message: error.message,
-        statusCode: res.statusCode
-      })
-    }
-  },
-
+  
 	createCharacter: async function (req, res) {
 		try {
       const characterData = req.body;

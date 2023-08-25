@@ -16,6 +16,8 @@ router.get("/", validateJwtMiddleware, userController.getUsers)
 //get route to return a specific users (requires auth)
 router.get("/:email", validateJwtMiddleware, userController.getUser)
 
+router.get('/:userId/characters', validateJwtMiddleware, userController.getUserCharacters);
+
 //put route to update a user (requires auth)
 router.put("/:email", validateJwtMiddleware, userController.updateUser)
 
