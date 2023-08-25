@@ -27,18 +27,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         select: false
     },
-    characters: {
-        type: [{
-            characterName: String,
-            level: {
-                type: Number,
-                default: 1
-            },
-            class: String,
-            race: String
-        }],
-        default: []
-    },
+    characters: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Character'
+    }],
     ownedCards: {
         type: [{
             cardId: String,

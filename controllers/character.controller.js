@@ -1,88 +1,139 @@
-const Character = require("../models/character.model")
-
+const Character = require('../models/character.model');
+const User = require('../models/user.model')
 const characterController = {
-  getCharacters: async function(req, res) {
-    let query = {}
+	getCharacters: async function (req, res) {
+		let query = {};
 
-    if (req.query.name) {
-      const regex = new RegExp(`.*${req.query.name}.*$`, "i")
-      query.name = {'$regex':regex}
-    }
+		if (req.query.name) {
+			const regex = new RegExp(`.*${req.query.name}.*$`, 'i');
+			query.name = { $regex: regex };
+		}
 
+		try {
+			let allCharacters = await Character.find(query);
+			res.json(allCharacters);
+		} catch (error) {
+			console.log('error getting all characters: ' + error);
+
+			res.status(400).json({
+				message: error.message,
+				statusCode: res.statusCode,
+			});
+		}
+	},
+
+	getCharacter: async function (req, res) {
+		try {
+			const characterName = req.params.name;
+
+			let foundCharacter = await Character.findOne({ name: characterName });
+
+			if (foundCharacter) {
+				res.json(foundCharacter);
+			} else {
+				res.status(404).send({
+					status: res.statusCode,
+					message: 'User Not Found!',
+				});
+			}
+		} catch (error) {
+			console.log('error getting user: ' + error);
+			res.status(400).json({
+				message: error.message,
+				statusCode: res.statusCode,
+			});
+		}
+	},
+
+  getUserCharacters: async function(req, res) {
     try {
-      let allCharacters = await Character.find(query)
-      res.json(allCharacters)
+      const userId = req.user._id;
+      const user = await User.findById(userId).populate('characters');
+      res.json(user.characters)
     } catch (error) {
-      console.log("error getting all characters: " + error)
-      //if any code in the try block fails, send the user a HTTP status of 400 and a message stating we could not find any users
+      console.error(`Error fetching user's character list`, error);
       res.status(400).json({
-          message: error.message,
-          statusCode: res.statusCode
+        message: error.message,
+        statusCode: res.statusCode
       })
-
-  }
+    }
   },
 
-  getCharacter: async function(req, res){
+	createCharacter: async function (req, res) {
+		try {
+      const characterData = req.body;
+      console.log(characterData)
+			let newCharacter = await Character.create(characterData);
 
-    //using a try/catch since we are using asyn/await and want to catch any errors if the code in the try block fails
-    try {
+      const userId = req.body.userId
+      const user = await User.findById(userId)
 
-        //get the email address of the user from the url parameters
-        const characterName = req.params.name;
-        
-        //use our model to find the user that match a query.
-        //{email: some@email.com} is the current query which really mean find the user with that email
-        //we use await here since this is an async process and we want the code to wait for this to finish before moving on to the next line of code
-        let foundCharacter = await Character.findOne({name: characterName})
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
-        //if we found the user, return that user otherwise return a 404
-        if(foundCharacter){
-            res.json(foundCharacter)
-        }else{
-            res.status(404).send({
-                status: res.statusCode,
-                message: "User Not Found!"
-            })
-        }
-        
-    } catch (error) {
-        console.log("error getting user: " + error)
-        //if any code in the try block fails, send the user a HTTP status of 400 and a message stating we could not find the user
-        res.status(400).json({
-            message: error.message,
-            statusCode: res.statusCode
-        })
+			user.characters.push(newCharacter._id);
+			await user.save();
 
-    }
-},
+			res.status(201).json(await Character.findById(newCharacter._id));
+		} catch (error) {
+			console.log('failed to create character: ' + error);
+			res.status(400).json({
+				message: error.message,
+				statusCode: res.statusCode,
+			});
+		}
+	},
+	updateCharacter: async function (req, res) {
+		try {
+			const characterName = req.params.name;
+			const updatedData = req.body;
+			let character = await Character.findOne({ name: characterName });
 
-  createCharacter: async function(req, res){
+			if (character) {
+				Object.assign(character, updatedData);
+				await character.save();
+				res.json(character);
+			} else {
+				res
+					.status(404)
+					.send({
+						message: 'Character Not Found!',
+						statusCode: res.statusCode,
+					});
+			}
+		} catch (error) {
+			console.log('Failed to update character: ' + error);
+			res.status(400).json({
+				message: error.message,
+				statusCode: res.statusCode,
+			});
+		}
+	},
 
-    try {
+	deleteCharacter: async function (req, res) {
+		try {
+			const characterName = req.params.name;
+			let character = await Character.findOneAndDelete({ name: characterName });
 
-        //store user data sent through the request
-        const characterData = req.body;
-
-        //pass the userData to the create method of the User model
-        let newCharacter = await Character.create(characterData)
-
-        //return the newly created user
-        res.status(201).json(await Character.findById(newCharacter._id))
-        
-    } catch (error) {
-        //handle errors creating user
-        console.log("failed to create character: " + error)
-        res.status(400).json({
-            message: error.message,
-            statusCode: res.statusCode
-        })
-    }
-
-}
-  // updateCharacter
-
-  // deleteCharacter
-}
+			if (character) {
+				res.json({ message: 'Character deleted successfully!' });
+			} else {
+				res
+					.status(404)
+					.send({
+						message: 'Character Not Found!',
+						statusCode: res.statusCode,
+					});
+			}
+		} catch (error) {
+			console.log('Failed to delete character: ' + error);
+			res.status(400).json({
+				message: error.message,
+				statusCode: res.statusCode,
+			});
+		}
+	},
+};
 
 module.exports = characterController;

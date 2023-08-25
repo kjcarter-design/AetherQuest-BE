@@ -9,7 +9,15 @@ const { validateJwtMiddleware } = require("../auth");
 router.post('/', validateJwtMiddleware, characterController.createCharacter);
 
 
-// ... Add more routes (GET, PUT, DELETE) as needed ...
+router.get('/', validateJwtMiddleware, characterController.getCharacters);
+
+router.get('/:name', validateJwtMiddleware, characterController.getCharacter);
+
+router.get('/user-characters', validateJwtMiddleware, characterController.getUserCharacters);
+
+router.put('/:name', validateJwtMiddleware, characterController.updateCharacter);
+
+router.delete('/:name', validateJwtMiddleware, characterController.deleteCharacter);
 
 
 module.exports = router;

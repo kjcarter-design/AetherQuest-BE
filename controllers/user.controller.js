@@ -111,7 +111,7 @@ console.log('getUser running')
             //use our model to find the user that match a query.
             //{email: some@email.com} is the current query which really mean find the user with that email
             //we use await here since this is an async process and we want the code to wait for this to finish before moving on to the next line of code
-            let foundUser = await User.findOne({email: userEmail})
+            let foundUser = await User.findOne({email: userEmail}).populate('characters')
 
             //if we found the user, return that user otherwise return a 404
             if(foundUser){
