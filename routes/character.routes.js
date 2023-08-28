@@ -15,7 +15,7 @@ router.get('/:name', validateJwtMiddleware, characterController.getCharacter);
 
 router.put('/:name', validateJwtMiddleware, characterController.updateCharacter);
 
-router.delete('/:name', validateJwtMiddleware, characterController.deleteCharacter);
+router.delete('/:characterId', validateJwtMiddleware, characterController.deleteCharacter);
 
 
 module.exports = router;
