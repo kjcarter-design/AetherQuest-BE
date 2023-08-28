@@ -70,30 +70,31 @@ const characterController = {
 			});
 		}
 	},
-	updateCharacter: async function (req, res) {
-		try {
-			const characterName = req.params.name;
-			const updatedData = req.body;
-			let character = await Character.findOne({ name: characterName });
 
-			if (character) {
-				Object.assign(character, updatedData);
-				await character.save();
-				res.json(character);
-			} else {
-				res.status(404).send({
-					message: 'Character Not Found!',
-					statusCode: res.statusCode,
-				});
-			}
-		} catch (error) {
-			console.log('Failed to update character: ' + error);
-			res.status(400).json({
-				message: error.message,
-				statusCode: res.statusCode,
-			});
-		}
-	},
+	updateCharacter: async function (req, res) {
+    try {
+        const characterId = req.params.characterId;
+        const updatedData = req.body;
+        let character = await Character.findById(characterId);
+
+        if (character) {
+            Object.assign(character, updatedData);
+            await character.save();
+            res.json(character);
+        } else {
+            res.status(404).send({
+                message: 'Character Not Found!',
+                statusCode: res.statusCode,
+            });
+        }
+    } catch (error) {
+        console.log('Failed to update character: ' + error);
+        res.status(400).json({
+            message: error.message,
+            statusCode: res.statusCode,
+        });
+    }
+},
 
 	deleteCharacter: async function (req, res) {
     try {
@@ -126,33 +127,6 @@ const characterController = {
     }
 }
 
-
-	// deleteCharacter: async function (req, res) {
-	// 	try {
-	// 		const characterId = req.params.id;
-	// 		let character = await Character.findByIdAndDelete(characterId);
-
-	// 		if (character) {
-	// 			const user = await User.findOne({ characters: characterId });
-	// 			if (user) {
-	// 				user.characters.pull(characterId);
-	// 				await user.save();
-	// 			}
-	// 			res.json({ message: 'Character deleted successfully!' });
-	// 		} else {
-	// 			res.status(404).send({
-	// 				message: 'Character not found!',
-	// 				statusCode: res.statusCode,
-	// 			});
-	// 		}
-	// 	} catch (error) {
-	// 		console.log('Failed to delete character: ' + error);
-	// 		res.status(400).json({
-	// 			message: error.message,
-	// 			statusCode: res.statusCode,
-	// 		});
-	// 	}
-	// },
 };
 
 module.exports = characterController;
