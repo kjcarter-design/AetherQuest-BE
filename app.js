@@ -1,4 +1,4 @@
-require("dotenv-safe").config();
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -6,7 +6,7 @@ const logger = require('morgan');
 const cors = require('cors')
 
 const auth = require("./auth");
-
+const s3Router = require('./routes/s3Router');
 //Bring in Mongoose so we can communicate with MongoDB
 const mongoose = require('mongoose')
 
@@ -36,9 +36,8 @@ app.use(swaggerDocsRouter);
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/api/characters', characterRouter)
-
-//tell our app to use our user routes and prefix them with /api
 app.use('/api/users', usersRouter);
+app.use('/s3', s3Router);
 
 //custom error hadndling
 app.use((err, req, res, next) => {

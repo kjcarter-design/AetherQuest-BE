@@ -13,7 +13,7 @@ const questController = {
 			let allQuests = await Quest.find(query);
 			res.json(allQuests);
 		} catch (error) {
-			console.log('error getting all quests: ' + error);
+			console.log('Error getting all quests: ' + error);
 
 			res.status(400).json({
 				message: error.message,

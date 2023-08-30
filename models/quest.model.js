@@ -27,6 +27,10 @@ const questSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  completionDialog: {
+    type: String,
+    required: true,
+  },
   step: {
 		type: String,
 		description: String,
@@ -37,6 +41,7 @@ const questSchema = new mongoose.Schema({
   },
   steps: {
 		type: Array,
+    descriptions: [],
 		encounters: [],
     default: [],
     required: true,
@@ -48,13 +53,6 @@ const questSchema = new mongoose.Schema({
     encounters: String,
     reward: String,
     xp: { type: Number, default: 0 },
-  },
-  armor: {
-    type: String,
-    ac: Number,
-    category: String,
-    stealthDisadvantage: Boolean,
-    cost: { quantity: Number, unit: String },
   },
   attachedGames: {
     type: Array,

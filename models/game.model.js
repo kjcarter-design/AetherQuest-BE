@@ -15,6 +15,11 @@ const gameSchema = new mongoose.Schema({
     //required: true,
   },
 
+  reward: {
+    type: String,
+    //required: true,
+  },
+
   currentQuest: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Quest'
@@ -29,8 +34,9 @@ const gameSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
         ref: 'Character'
   }],
+
   attachedStoryteller: {
-    type: mongooose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Users'
   },
   image: { type: String },

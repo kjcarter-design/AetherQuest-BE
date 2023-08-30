@@ -36,7 +36,7 @@ const userController = {
             res.json(allUsers)
             
         } catch (error) {
-            console.log("error getting all users: " + error)
+            console.log("Error getting all users: " + error)
             //if any code in the try block fails, send the user a HTTP status of 400 and a message stating we could not find any users
             res.status(400).json({
                 message: error.message,
@@ -58,7 +58,7 @@ const userController = {
                     statusCode: res.statusCode
                 });
             }
-            console.log("failed to create user: " + error);
+            console.log("Failed to create user: " + error);
             res.status(400).json({
                 message: error.message,
                 statusCode: res.statusCode
@@ -91,7 +91,7 @@ const userController = {
             res.json(await User.findById(user._id))
             
         } catch (error) {
-            console.log("failed to update user: " + error)
+            console.log("Failed to update user: " + error)
             res.status(400).json({
                 message: error.message,
                 statusCode: res.statusCode
@@ -124,7 +124,7 @@ const userController = {
             }
             
         } catch (error) {
-            console.log("error getting user: " + error)
+            console.log("Error getting user: " + error)
             //if any code in the try block fails, send the user a HTTP status of 400 and a message stating we could not find the user
             res.status(400).json({
                 message: error.message,
