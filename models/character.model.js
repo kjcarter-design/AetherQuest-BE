@@ -9,13 +9,18 @@ const characterSchema = new mongoose.Schema({
 		required: true,
 		minlength: 1,
 	},
-	race: {
-		type: String,
-		required: true,
-	},
 	class: {
-		type: String,
-		required: true,
+		name: { type: String, required: true },
+		desc: { type: String, default: "" },
+		prof_weapons: { type: [String], default: [] },
+	},
+	abilityScores: {
+		STR: { type: Number, default: 10, select: false },
+		DEX: { type: Number, default: 10, select: false },
+		CON: { type: Number, default: 10, select: false },
+		INT: { type: Number, default: 10, select: false },
+		WIS: { type: Number, default: 10, select: false },
+		CHA: { type: Number, default: 10, select: false },
 	},
 	level: {
 		type: Number,

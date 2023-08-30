@@ -1,7 +1,26 @@
 const AWS = require('aws-sdk');
 const Character = require('../models/character.model');
 const User = require('../models/user.model');
+
+const recommendedStats = {
+	"Barbarian": { STR: 15, DEX: 14, CON: 13, INT: 8, WIS: 12, CHA: 10 },
+	"Bard": { STR: 8, DEX: 14, CON: 12, INT: 10, WIS: 13, CHA: 15 },
+	"Cleric": { STR: 10, DEX: 8, CON: 14, INT: 12, WIS: 15, CHA: 13 },
+	"Druid": { STR: 8, DEX: 12, CON: 14, INT: 10, WIS: 15, CHA: 13 },
+	"Fighter": { STR: 15, DEX: 14, CON: 13, INT: 8, WIS: 12, CHA: 10 },
+	"Monk": { STR: 10, DEX: 15, CON: 14, INT: 8, WIS: 13, CHA: 12 },
+	"Paladin": { STR: 15, DEX: 10, CON: 14, INT: 8, WIS: 12, CHA: 13 },
+	"Ranger": { STR: 10, DEX: 15, CON: 14, INT: 8, WIS: 13, CHA: 12 },
+	"Rogue": { STR: 8, DEX: 15, CON: 14, INT: 10, WIS: 12, CHA: 13 },
+	"Sorcerer": { STR: 8, DEX: 12, CON: 14, INT: 10, WIS: 13, CHA: 15 },
+	"Warlock": { STR: 8, DEX: 12, CON: 14, INT: 10, WIS: 13, CHA: 15 },
+	"Wizard": { STR: 8, DEX: 12, CON: 14, INT: 15, WIS: 13, CHA: 10 }
+};
+
 const characterController = {
+
+
+	
 	getCharacters: async function (req, res) {
 		let query = {};
 
@@ -51,7 +70,13 @@ const characterController = {
 				const characterData = req.body;
 				console.log(characterData);
 
-				// Generate the object URL for the uploaded image
+				// Fetch recommended stats for the chosen class
+				const defaultStats = recommendedStats[characterData.class];
+				if (defaultStats) {
+						characterData.abilityScores = defaultStats;
+				}
+
+				// Generate the object URL for the uploaded image (if you're using AWS S3 or similar)
 
 				let newCharacter = await Character.create(characterData);
 
@@ -73,8 +98,8 @@ const characterController = {
 						statusCode: res.statusCode,
 				});
 		}
-},
-
+	},
+	
 updateCharacter: async function (req, res) {
 		try {
 				const characterId = req.params.characterId;
